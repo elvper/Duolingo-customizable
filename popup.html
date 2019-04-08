@@ -1,0 +1,47 @@
+<html style="--enabled: rgb(0,0,0);">
+
+<head>
+	<link rel="stylesheet" type="text/css" href="popup.css">
+	<script src="popup.js"></script>
+	
+</head>
+
+<body id="TD">
+<div id="TrueDarkSettings">
+	<div id="TDcog">
+	</div>
+	<div id="TDpop" style="opacity: 1;">
+		<svg id="enabled" class="enable" baseProfile='tiny' x='0px' y='0px' width='177px' height='202px' viewBox='-0.8 -0.5 177 202' xml:space='preserve'>
+			<path fill='none' stroke='#000' stroke-width='30' stroke-linecap='round' d='M33.7,64.3C22.1,77.2,15,94.3,15,113  c0,40.1,32.5,72.7,72.7,72.7c40.1,0,72.7-32.5,72.7-72.7c0-18.7-7.1-35.8-18.7-48.7'/>
+			<line fill='none' stroke='#000' stroke-width='30' stroke-linecap='round' x1='87.8' y1='15' x2='87.8' y2='113'/>
+		</svg>
+		<h3 class="TDtext">Session brightness (temporary)</h3>
+		<input id="sessionvalue" class="TDslidervalue" type="text" disabled="true" value="">
+		<input id="session" class="TDbrightslider" type="range" min="-20" max="70" value="0">
+		<h3 class="TDtext">Daytime brightness (premanent)</h3>
+		<input id="dayvalue" class="TDslidervalue" type="text" disabled="true" value="">
+		<input id="day" class="TDbrightslider" type="range" min="0" max="70" value="0">
+		<hr class="TDsplit">
+		<h3 class="TDtext">Location for dynamic brightness</h3>
+		<div class="TDcontainer">
+			<h4 class="TDtext TDtextdouble">Long </h4>
+			<input id="longitude" type="text" class="TDinputdouble" value="">
+			<h4 class="TDtext TDtextdouble">Lat </h4>
+			<input id="latitude" type="text" class="TDinputdouble" value="">
+		</div>
+		<div class="TDcontainer">
+			<input id="dynamicdaynight" type="checkbox">
+			<label for="dynamicdaynight">Enable dynamic day-night brightness?</label>
+		</div>
+		<h3 class="TDtext">Nighttime brightness</h3>
+		<input id="nightvalue" class="TDslidervalue" type="text" disabled="true" value="">
+		<input id="night" class="TDbrightslider" type="range" min="0" max="70" value="0">
+		<hr class="TDsplit">
+		<h3 id="version" class="TDtext">Version: X.X.X</h3>
+		
+
+	</div>
+</div>
+</body>
+
+</html>
