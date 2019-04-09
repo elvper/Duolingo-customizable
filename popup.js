@@ -4,6 +4,7 @@ version = "3.0.0";
 
 let gid = (e) => document.getElementById(e);
 let gcl = (e) => document.getElementsByClassName(e);
+let html = document.documentElement;
 	
 f = {};
 f.c = {};
@@ -39,7 +40,42 @@ defsettings = {
 	userinput: {
 		latitude: 0,
 		longitude: 0
-	}
+	},
+	color: {
+		// backgrounds colors
+		bg: {
+			max: "rgb(0, 0, 0)", // black
+			min: "rgb(100, 100, 100)", // dark gray
+			transparent: "rgba(0,0,0,0),"
+		},
+		// text colors
+		text: { // main text color
+			max: "rgb(200, 200, 200)", // light gray
+			min: "rgb(255, 255, 255)", // white
+			contrast: "#ffb100",
+			url: "#1cb0f6"
+		},
+		// blue theme colors
+		duoblue: {
+			max: "rgb(28, 176, 246)",
+			min: "rgb(12, 77, 110)",
+		},
+		// correct colors
+		correct: {
+			max: "rgb(0, 238, 0)",
+			min: "rgb(0, 100, 0)",
+		},
+		// wrong colors
+		wrong: {
+			max: "rgb(255, 0, 0)",
+			min: "rgb(88, 0, 0)",
+		},
+		// golden colors
+		gold: {
+			max: "rgb(255, 200, 0)",
+			min: "rgb(255, 180, 0)",
+		}
+	},
 };
 settings = defsettings;
 
@@ -89,6 +125,7 @@ f.popupSettings = function() {
 	
 }
 
+// set menu values based on settings
 f.apply = {
 	// enable button
 	enabled: function(){
@@ -127,6 +164,21 @@ f.apply = {
 		for(var e in settings.enable) {
 			
 		}
+	},
+	
+	// set color styles
+	color: function(){
+		for(var e in settings.color) {
+			for(var p in settings.color[e]) {
+				// CSS variables
+				html.style.setProperty("--" + e + p, settings.color[e][p]);
+				// color pick field values
+				if(!["bgtransparent"].includes(e + p)){
+				console.log(e + p);
+				gid(e + p).setAttribute("value", settings.color[e][p]);
+				}
+			}
+		}
 	}
 };
 
@@ -162,6 +214,17 @@ f.listener = {
 				e.addEventListener("click", function(e){
 					settings.enabled = !settings.enabled;
 					f.apply.enabled();
+					f.savesettings();
+				});
+			}
+		)
+	},
+	
+	color: function(){
+		Array.from(gcl("colorpicker")).forEach(
+			function(e, i, a) {
+				e.addEventListener("change", function(e){
+					
 				});
 			}
 		)
@@ -173,9 +236,6 @@ f.savesettings = function(){
 		console.log(cs.settings.stored.default);
 	}});
 };
-
-
-
 
 
 
@@ -247,9 +307,12 @@ chrome.storage.sync.get("TDsettings", function(obj) {
 	f.apply.text();
 	document.getElementById("version").innerHTML = "Version: " + version;
 	f.apply.enabled();
+	f.apply.color();
 	
 	f.listener.slider();
 	f.listener.enabled();
+	// enable color picker for color fields
+	var colorpickers = KellyColorPicker.attachToInputByClass('colorpicker', {alpha_slider: false, size: 200});
 });
 
 }());

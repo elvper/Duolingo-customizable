@@ -2,6 +2,8 @@
 	--bg: #000;
 	--text: #c8c8c8;
 	--accent: #1caff6;
+	--left: #000;
+	--right: #FFF;
 }
 
 body {
@@ -146,25 +148,57 @@ svg#enabled line {
 	stroke: var(--enabled);
 }
 
+.preview {
+	height: 20px;
+    width: 80%;
+    margin: 0 10% 0 10%;
+}
 
+.preview.bg {
+	background: linear-gradient(to right, var(--bgmax) 0%, var(--bgmin) 100%);
+}
 
+.preview.duoblue {
+	background: linear-gradient(to right, var(--duobluemax) 0%, var(--duobluemin) 100%);
+}
 
+.previewtext {
+	overflow: hidden;
+}
 
+.previewtext.text {
+	background: linear-gradient(to right, var(--textmax) 0%, var(--textmin) 100%);
+	-webkit-text-fill-color: transparent;
+	-webkit-background-clip: text;
+}
 
+.previewtext.textrev {
+	background: linear-gradient(to right, var(--textmin) 0%, var(--textmax) 100%);
+	-webkit-text-fill-color: transparent;
+	-webkit-background-clip: text;
+}
 
+.previewtext.contrast {
+	color: var(--textcontrast);
+}
 
+.previewtext.url {
+	color: var(--texturl);
+}
 
+.preview.correct {
+	background: var(--correctmin);
+	color: var(--correctmax);
+}
 
+.preview.wrong {
+	background: var(--wrongmin);
+	color: var(--wrongmax);
+}
 
-
-
-
-
-
-
-
-
-
+.preview.gold {
+	background: linear-gradient(to right, var(--goldmin) 0%, var(--goldmax) 100%);
+}
 
 
 
