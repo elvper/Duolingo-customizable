@@ -164,6 +164,8 @@ svg#enabled line {
 
 .previewtext {
 	overflow: hidden;
+	white-space: nowrap;
+	margin-top: 0;
 }
 
 .previewtext.text {
