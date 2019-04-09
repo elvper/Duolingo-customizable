@@ -1533,11 +1533,18 @@ function KellyColorPicker(cfg) {
         if (!manualEnter) {
             if (a < 1 && inputFormat === 'mixed') {
                 input.value = rgba;
+				input.setAttribute("value", rgba);
+				input.dispatchEvent(new Event('updatecolor'));
             } else {
-                if (inputFormat === 'hex' || inputFormat === 'mixed')
+                if (inputFormat === 'hex' || inputFormat === 'mixed') {
                     input.value = hex;
-                else
+					input.setAttribute("value", rgba);
+					input.dispatchEvent(new Event('updatecolor'));
+                } else {
                     input.value = rgba;
+					input.setAttribute("value", rgba);
+					input.dispatchEvent(new Event('updatecolor'));
+				}
             }
         }
 

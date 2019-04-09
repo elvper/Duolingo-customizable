@@ -1,5 +1,7 @@
 (function (){
 	
+// add contrast bg text color variable (white on duoblue)
+	
 version = "3.0.0";
 
 let gid = (e) => document.getElementById(e);
@@ -149,22 +151,19 @@ f.apply = {
 				var fieldvalue = elements[slider].value > 0 ? "+" + elements[slider].value : elements[slider].value;
 			}
 			document.getElementById(slider + "value").setAttribute("value", fieldvalue + "%");
-		}
-	},
+	}	},
 	
 	// set editable textfields value
 	text: function(){
 		for(var e in settings.userinput) {
 			document.getElementById(e).setAttribute("value", settings.userinput[e]);
-		}
-	},
+	}	},
 	
 	// set checkmarks
 	check: function(){
 		for(var e in settings.enable) {
 			
-		}
-	},
+	}	},
 	
 	// set color styles
 	color: function(){
@@ -174,20 +173,17 @@ f.apply = {
 				html.style.setProperty("--" + e + p, settings.color[e][p]);
 				// color pick field values
 				if(!["bgtransparent"].includes(e + p)){
-				console.log(e + p);
 				gid(e + p).setAttribute("value", settings.color[e][p]);
-				}
-			}
-		}
-	}
+	}	}	}	}
 };
 
 f.listener = {
+	// brightness slider move
 	slider: function(){
 		Array.from(gcl("TDbrightslider")).forEach(
 			// set value field
 			function(element, i, a) {
-				// change settings
+				// change settings live
 				element.addEventListener("input", function(e){
 					if(["day", "night"].includes(e.target.id)){
 						settings.brightness[e.target.id] = Number((1 - Number(e.target.value) / 100).toFixed(2));
@@ -200,7 +196,7 @@ f.listener = {
 					f.apply.sliders(settings.calc.slider);
 					f.apply.values(settings.calc.slider);
 				});
-				// save changes
+				// save changes at change end
 				element.addEventListener("change", function(e){
 					f.savesettings();
 				});
@@ -208,6 +204,7 @@ f.listener = {
 		)
 	},
 	
+	// on on/off button press
 	enabled: function(){
 		Array.from(gcl("enable")).forEach(
 			function(e, i, a) {
@@ -220,11 +217,12 @@ f.listener = {
 		)
 	},
 	
+	// on color input change (don't save)
 	color: function(){
 		Array.from(gcl("colorpicker")).forEach(
 			function(e, i, a) {
-				e.addEventListener("change", function(e){
-					
+				e.addEventListener("updatecolor", function(e){
+					html.style.setProperty("--" + e.target.id, e.target.value);
 				});
 			}
 		)
@@ -311,6 +309,7 @@ chrome.storage.sync.get("TDsettings", function(obj) {
 	
 	f.listener.slider();
 	f.listener.enabled();
+	f.listener.color();
 	// enable color picker for color fields
 	var colorpickers = KellyColorPicker.attachToInputByClass('colorpicker', {alpha_slider: false, size: 200});
 });
