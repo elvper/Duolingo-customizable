@@ -8,8 +8,6 @@
 
 <body id="TD">
 <div id="TrueDarkSettings">
-	<div id="TDcog">
-	</div>
 	<div id="TDpop" style="opacity: 1;">
 		<svg id="enabled" class="enable" baseProfile='tiny' x='0px' y='0px' width='177px' height='202px' viewBox='-0.8 -0.5 177 202' xml:space='preserve'>
 			<path fill='none' stroke='#000' stroke-width='30' stroke-linecap='round' d='M33.7,64.3C22.1,77.2,15,94.3,15,113  c0,40.1,32.5,72.7,72.7,72.7c40.1,0,72.7-32.5,72.7-72.7c0-18.7-7.1-35.8-18.7-48.7'/>
@@ -43,74 +41,82 @@
 			<input id="night" class="TDbrightslider" type="range" min="0" max="70" value="0">
 		</div>
 		
+		<hr class="TDsplit">
+		
 		<h2 class="TDtext">Customize colors</h2>
 		<div id="color">
 		
+			<button id="savecolors">Save color configuration</button>
+			<button id="restorecolors">Reset to default colors</button>
+		
 			<h3 class="TDtext">Background</h3>
-			<input id="bgmax" class="colorpicker" value="rgb(0, 0, 0)">
+			<input id="bg.max" class="colorpicker" value="rgb(0, 0, 0)">
 			<div class="preview bg">
 				<p class="previewtext text">
 					##################################
 				</p>
 			</div>
-			<input id="bgmin" class="colorpicker" value="rgb(0, 0, 0)">
+			<input id="bg.min" class="colorpicker" value="rgb(0, 0, 0)">
 			
 			<h3 class="TDtext">Contrast background</h3>
-			<input id="duobluemax" class="colorpicker" value="rgb(0, 0, 0)">
+			<input id="duoblue.max" class="colorpicker" value="rgb(0, 0, 0)">
 			<div class="preview duoblue">
 				<p class="previewtext textrev">
 					##################################
 				</p>
 			</div>
-			<input id="duobluemin" class="colorpicker" value="rgb(0, 0, 0)">
+			<input id="duoblue.min" class="colorpicker" value="rgb(0, 0, 0)">
 			
 			<h3 class="TDtext">Text</h3>
-			<input id="textmax" class="colorpicker" value="rgb(0, 0, 0)">
+			<input id="text.max" class="colorpicker" value="rgb(0, 0, 0)">
 			<div class="preview bg">
 				<p class="previewtext text">
 					##################################
 				</p>
 			</div>
-			<input id="textmin" class="colorpicker" value="rgb(0, 0, 0)">
+			<input id="text.min" class="colorpicker" value="rgb(0, 0, 0)">
 			
 			<h3 class="TDtext">Contrast text</h3>
-			<input id="textcontrast" class="colorpicker" value="rgb(0, 0, 0)">
+			<input id="text.contrast" class="colorpicker" value="rgb(0, 0, 0)">
 			<div class="preview bg">
 				<p class="previewtext contrast">
 					##################################
 				</p>
 			</div>
+			<input class="potato" disabled>
 			
 			<h3 class="TDtext">URL text</h3>
-			<input id="texturl" class="colorpicker" value="rgb(0, 0, 0)">
+			<input id="text.url" class="colorpicker" value="rgb(0, 0, 0)">
 			<div class="preview bg">
 				<p class="previewtext url">
 					##################################
 				</p>
 			</div>
+			<input class="potato" disabled>
 			
 			<h3 class="TDtext">Correct</h3>
-			<input id="correctmax" class="colorpicker" value="rgb(0, 0, 0)">
+			<input id="correct.max" class="colorpicker" value="rgb(0, 0, 0)">
 			<div class="preview correct">
 				<p class="previewtext">
 					##################################
 				</p>
 			</div>
-			<input id="correctmin" class="colorpicker" value="rgb(0, 0, 0)">
+			<input id="correct.min" class="colorpicker" value="rgb(0, 0, 0)">
 			
 			<h3 class="TDtext">Wrong</h3>
-			<input id="wrongmax" class="colorpicker" value="rgb(0, 0, 0)">
+			<input id="wrong.max" class="colorpicker" value="rgb(0, 0, 0)">
 			<div class="preview wrong">
 				<p class="previewtext">
 					##################################
 				</p>
 			</div>
-			<input id="wrongmin" class="colorpicker" value="rgb(0, 0, 0)">
+			<input id="wrong.min" class="colorpicker" value="rgb(0, 0, 0)">
 			
 			<h3 class="TDtext">Gold</h3>
-			<input id="goldmin" class="colorpicker" value="rgb(0, 0, 0)">
+			<input id="gold.min" class="colorpicker" value="rgb(0, 0, 0)">
 			<div class="preview gold"></div>
-			<input id="goldmax" class="colorpicker" value="rgb(0, 0, 0)">
+			<input id="gold.max" class="colorpicker" value="rgb(0, 0, 0)">
+			
 		</div>
 		
 		<hr class="TDsplit">

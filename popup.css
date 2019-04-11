@@ -1,6 +1,6 @@
 :root {
 	--bg: #000;
-	--text: #c8c8c8;
+	--text: #e1e1e1;
 	--accent: #1caff6;
 	--left: #000;
 	--right: #FFF;
@@ -17,10 +17,17 @@ body {
 	width: 100%;
 }
 
+h2.TDtext {
+	margin-top: 2px;
+	margin-bottom: -5px;
+	font-size: 120%;
+	font-weight: 600;
+}
+
 h3.TDtext {
 	margin-top: 10px;
-	margin-bottom: 5px;
-	font-size: 120%;
+	margin-bottom: 2px;
+	font-size: 100%;
 	font-weight: 500;
 }
 
@@ -137,7 +144,7 @@ label {
 }
 
 svg#enabled {
-	padding: 15px 0 0 0;
+	padding: 10px 0 0 0;
 	width: 60px;
 	height: 60px;
 	cursor: pointer;
@@ -156,11 +163,11 @@ svg#enabled line {
 }
 
 .preview.bg {
-	background: linear-gradient(to right, var(--bgmax) 0%, var(--bgmin) 100%);
+	background: linear-gradient(to right, var(--bg\.max) 0%, var(--bg\.min) 100%);
 }
 
 .preview.duoblue {
-	background: linear-gradient(to right, var(--duobluemax) 0%, var(--duobluemin) 100%);
+	background: linear-gradient(to right, var(--duoblue\.max) 0%, var(--duoblue\.min) 100%);
 }
 
 .previewtext {
@@ -170,37 +177,37 @@ svg#enabled line {
 }
 
 .previewtext.text {
-	background: linear-gradient(to right, var(--textmax) 0%, var(--textmin) 100%);
+	background: linear-gradient(to right, var(--text\.max) 0%, var(--text\.min) 100%);
 	-webkit-text-fill-color: transparent;
 	-webkit-background-clip: text;
 }
 
 .previewtext.textrev {
-	background: linear-gradient(to right, var(--textmin) 0%, var(--textmax) 100%);
+	background: linear-gradient(to right, var(--text\.min) 0%, var(--text\.max) 100%);
 	-webkit-text-fill-color: transparent;
 	-webkit-background-clip: text;
 }
 
 .previewtext.contrast {
-	color: var(--textcontrast);
+	color: var(--text\.contrast);
 }
 
 .previewtext.url {
-	color: var(--texturl);
+	color: var(--text\.url);
 }
 
 .preview.correct {
-	background: var(--correctmin);
-	color: var(--correctmax);
+	background: var(--correct\.min);
+	color: var(--correct\.max);
 }
 
 .preview.wrong {
-	background: var(--wrongmin);
-	color: var(--wrongmax);
+	background: var(--wrong\.min);
+	color: var(--wrong\.max);
 }
 
 .preview.gold {
-	background: linear-gradient(to right, var(--goldmin) 0%, var(--goldmax) 100%);
+	background: linear-gradient(to right, var(--gold\.min) 0%, var(--gold\.max) 100%);
 }
 
 .colorpicker {
@@ -211,9 +218,22 @@ svg#enabled line {
 	height: 22px;
 }
 
+.potato {
+	width: 15%;
+	vertical-align: top;
+	margin-left: -2px;
+	border-width: 0;
+	height: 22px;
+	background: #000;
+}
 
+.popup-kelly-color {
+	background: var(--bg) !important;
+}
 
-
+.popup-kelly-color[style*="left: 300px"] {
+    left: 130px !important;
+}
 
 
 
