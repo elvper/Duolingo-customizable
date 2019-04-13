@@ -2,9 +2,10 @@
     "manifest_version": 2,
     "name": "Duolingo True Dark",
     "short_name": "DTD",
-    "description": "Unofficial dark theme for Duolingo",
-    "version": "2.3.7",
+    "description": "Unofficial theme changer for Duolingo",
+    "version": "3.0.2",
 	"author": "elvper",
+	"content_security_policy": "script-src 'self' https://maps.googleapis.com; object-src 'self'",
     "content_scripts": [
         {
             "js": [
@@ -36,7 +37,8 @@
         "storage",
 		"activeTab",
         "*://duolingo.com/*",
-        "*://*.duolingo.com/*"
+        "*://*.duolingo.com/*",
+		"*://*.maps.googleapis.com/*"
     ]
 }
 

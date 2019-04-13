@@ -3,7 +3,7 @@
 // add contrast bg text color variable (white on duoblue)?
 // add style re-add on preview (delayed)
 	
-version = "3.0.0";
+version = "3.0.2";
 
 let gid = (e) => document.getElementById(e);
 let gcl = (e) => document.getElementsByClassName(e);
@@ -12,9 +12,9 @@ let html = document.documentElement;
 var settings = {};
 
 f = {};
-f.c = {};
 
-f.c.hourstojstime = (hours) => hours * 3600000;
+// convert hours to js time (microseconds)
+f.hourstojstime = (hours) => hours * 3600000;
 
 // rgb to array
 f.rgbsplit = (rgb) => rgb.match(/\d+/g).map(Number);
@@ -72,8 +72,8 @@ defsettings = {
 		fadeearlier: 0.5
 	},
 	userinput: {
-		latitude: 0,
-		longitude: 0
+		latitude: null,
+		longitude: null
 	},
 	color: {
 		// backgrounds colors
@@ -86,8 +86,8 @@ defsettings = {
 		text: { // main text color
 			max: "rgb(200, 200, 200)",
 			min: "rgb(255, 255, 255)",
-			contrast: "#ffb100",
-			url: "#1cb0f6"
+			contrast: "rgb(255, 177, 0)",
+			url: "rgb(28, 176, 246)"
 		},
 		// blue theme colors
 		duoblue: {
@@ -118,7 +118,7 @@ defsettings = {
 
 // brightness slider limits and values
 f.brightnesssliders = function() {
-	expiredornot = settings.lastsession + f.c.hourstojstime(settings.remembersession) < new Date().getTime();
+	expiredornot = settings.lastsession + f.hourstojstime(settings.remembersession) < new Date().getTime();
 	settings.brightness.night = settings.brightness.night > settings.brightness.day ? settings.brightness.day : settings.brightness.night;
 	settings.calc = {
 		slider: {
@@ -140,32 +140,16 @@ f.brightnesssliders = function() {
 		},
 		sessionexpired: expiredornot
 	};
-}
-
-// get stored settings
-chrome.storage.sync.get("TDsettings", function(obj) {
-	var storedsettings = null;
-	if(obj.TDsettings) {
-		storedsettings = JSON.parse(obj.TDsettings);
-	} else {
-		// get default settings
-		storedsettings = defsettings;
-	}
-	document.getElementById("TDpop").style.setProperty("opacity", 1);
-	
-	Object.assign(settings, f.brightnesssliders(storedsettings));
-	console.log(settings);
-});
+};
 
 f.update = function(target, payload = settings){
 	var message = {
 		target: target,
 		payload: payload
 	};
-	console.log(message);
 	chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
 		chrome.tabs.sendMessage(tabs[0].id, {data: message}, function(response) {
-			console.log(response);
+			//console.log(response);
 		});
 	});
 };
@@ -199,7 +183,7 @@ f.apply = {
 	// set editable textfields value
 	text: function(){
 		for(var e in settings.userinput) {
-			document.getElementById(e).setAttribute("value", settings.userinput[e]);
+			document.getElementById(e).setAttribute("value", Number(settings.userinput[e]).toFixed(5));
 	}	},
 	
 	// set checkmarks
@@ -216,13 +200,18 @@ f.apply = {
 				html.style.setProperty("--" + e + "." + p, settings.color[e][p]);
 				// color pick field values
 				if(!["bgtransparent"].includes(e + p)){
-				gid(e + "." + p).setAttribute("value", settings.color[e][p]);
-				gid(e + "." + p).value = f.rgbhex(settings.color[e][p]);
-				var ev = document.createEvent('Event');
-				ev.initEvent('keypress');
-				ev.which = ev.keyCode = 13;
-				gid(e + "." + p).dispatchEvent(ev);
-	}	}	}	}
+					gid(e + "." + p).setAttribute("value", settings.color[e][p]);
+					gid(e + "." + p).value = f.rgbhex(settings.color[e][p]);
+					var ev = document.createEvent('Event');
+					ev.initEvent('keypress');
+					ev.which = ev.keyCode = 13;
+					gid(e + "." + p).dispatchEvent(ev);
+	}	}	}	},
+	
+	// set dynamic day/night brightness toggle button value
+	dynamic: function(){
+		gid("dynamicdaynight").checked = settings.brightness.dynamic;
+	}
 };
 
 f.listener = {
@@ -240,12 +229,27 @@ f.listener = {
 						settings.brightness[e.target.id] = Number((Number(e.target.value) / 100).toFixed(2));
 					};
 					// change visible slider values
-					f.brightnesssliders()
+					f.brightnesssliders();
 					f.apply.sliders(settings.calc.slider);
 					f.apply.values(settings.calc.slider);
+					// preview the change
+					f.update("dynamic", {
+						type: "brightness",
+						data: {
+							slider: e.target.id,
+							settings: settings.brightness,
+							lastsession: settings.lastsession,
+							remembersession: settings.remembersession,
+							loc: settings.userinput
+						}
+					});
 				});
 				// save changes at change end
 				element.addEventListener("change", function(e){
+					if(e.target.id === "night"){
+						settings.brightness.dynamic = true;
+						gid("dynamicdaynight").checked = true;
+					};
 					f.savesettings();
 				});
 			}
@@ -304,7 +308,53 @@ f.listener = {
 			};
 			f.update("css", "update");
 		});
-	}
+	},
+	
+	// turn dynamic brightness on/off
+	dynamic: function(){
+		gid("dynamicdaynight").addEventListener("change", function(e){
+			settings.brightness.dynamic = !settings.brightness.dynamic;
+			f.savesettings();
+			// update css? ############################################################
+		});
+	},
+	
+	// entering coordinates
+	locationinput: function(){
+		gid("latitude").addEventListener("input", function(e){
+			var val = Number(e.target.value);
+			if(val && val <= 90 && val >= -90){
+				settings.userinput.latitude = val;
+				f.savesettings();
+				gid("dynamicdaynight").checked = true;
+				settings.brightness.dynamic = true;
+			} else {
+				e.target.value = e.target.value.substring(0, e.target.value.length - 1);
+			};
+		});
+		gid("longitude").addEventListener("change", function(e){
+			var val = Number(e.target.value);
+			if(val && val <= 180 && val >= -180){
+				settings.userinput.longitude = val;
+				f.savesettings();
+				gid("dynamicdaynight").checked = true;
+				settings.brightness.dynamic = true;
+			} else {
+				e.target.value = e.target.value.substring(0, e.target.value.length - 1);
+			};
+		});
+		// recalc brightness ##########################################################
+		// apply to map if open? ######################################################
+	},
+	
+	// pick location on map button
+	picklocation: function(){
+		gid("picklocation").addEventListener("click", function(e){
+			gid("picklocation").style.setProperty("display", "none");
+			gid("map").style.setProperty("display", "inherit");
+			f.googlemaps();
+		});
+	},
 };
 
 f.savesettings = function(){
@@ -336,8 +386,66 @@ f.applychange = {
 	}
 };
 
+var gmaps = {},
+	attempt = 0;
+// load google maps
+gmaps.load = function() {
+	if (attempt < 1000){
+		attempt++;
+		try {
+			gmaps.initialize();
+			console.log("Loaded Google maps after " + attempt + " attempts.");
+		} catch(err) {
+			// if load fails try again
+			setTimeout(function(){
+				gmaps.load();
+			}, 10);
+		};
+	};
+};
+	
+gmaps.initialize = function() {
+	var latitude = settings.userinput.latitude || 40,
+		longitude = settings.userinput.longitude || -95;
+	var zoomlevel = latitude == 40 && longitude == -95 ? 3 : 12;
+	var map = new google.maps.Map(document.getElementById('map'), {
+		zoom: zoomlevel,
+		mapTypeControl: false,
+		streetViewControl: false,
+		center: {lat: latitude, lng: longitude}
+	});
+	if(zoomlevel == 12) gmaps.addMarker({lat: latitude, lng: longitude}, map);
+	google.maps.event.addListener(map, 'click', function(event) {
+		gmaps.addMarker(event.latLng, map);
+		gid("latitude").value = event.latLng.lat().toFixed(5);
+		gid("longitude").value = event.latLng.lng().toFixed(5);
+		settings.userinput.latitude = event.latLng.lat();
+		settings.userinput.longitude = event.latLng.lng();
+		f.savesettings();
+	});
+}
 
 
+var marker;
+// Adds a marker to the map.
+gmaps.addMarker = function(location, map) {
+	if(!marker){
+	marker = new google.maps.Marker({
+	  position: location,
+	  map: map
+	});
+  } else {
+	marker.setPosition(location);
+  }
+}
+
+// add google maps to the menu
+f.googlemaps = function(){
+	var gmapsscript = document.createElement("script");
+	gmapsscript.src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyCDehCVbzJ7oF6YSmN8_aZHZmEtKAzxtXY";
+	document.head.appendChild(gmapsscript);
+	gmaps.load();
+}
 
 
 
@@ -377,17 +485,13 @@ f.applychange = {
 // get stored settings
 chrome.storage.sync.get("TDsettings", function(obj) {
 	var storedsettings = null;
-	if(obj.TDsettings) {
+	if(obj && obj.TDsettings) {
 		settings = JSON.parse(JSON.stringify(defsettings));
 		Object.assign(settings, JSON.parse(obj.TDsettings));
 	} else {
 		// get default settings
 		settings = defsettings;
-		// save default settings
-		//chrome.storage.sync.set({"TDsettings": JSON.stringify(settings), function() {
-		//	console.log(cs.settings.stored.default);
-		//}});
-	}
+	};
 	
 	Object.assign(settings, f.brightnesssliders());
 	console.log(settings);
@@ -397,6 +501,7 @@ chrome.storage.sync.get("TDsettings", function(obj) {
 	document.getElementById("version").innerHTML = "Version: " + version;
 	f.apply.enabled();
 	f.apply.color();
+	f.apply.dynamic();
 	
 	// enable color picker for color fields
 	var colorpickers = KellyColorPicker.attachToInputByClass('colorpicker', {alpha_slider: false, size: 200});
@@ -406,7 +511,27 @@ chrome.storage.sync.get("TDsettings", function(obj) {
 	f.listener.color();
 	f.listener.savecolors();
 	f.listener.defaultcolors();
+	f.listener.dynamic();
+	f.listener.picklocation();
+	f.listener.locationinput();
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }());
 

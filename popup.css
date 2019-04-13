@@ -43,7 +43,7 @@ h3.TDtext {
 }
 
 hr.TDsplit {
-    margin: 25px 0;
+    margin: 20px 0 10px 0;
 }
 
 #TDpop input[type="range"] {
@@ -235,9 +235,19 @@ svg#enabled line {
     left: 130px !important;
 }
 
+#map {
+	height: 200px;
+	display: none;
+	margin-top: 5px;
+}
 
-
-
+button {
+	margin-top: 5px;
+	background: var(--bg);
+    color: var(--text);
+    border-radius: 6px;
+	cursor: pointer;
+}
 
 
 
